@@ -9,6 +9,7 @@
 import Foundation
 import SpriteKit
 
+// Create class for a moving ground
 class BLMovingGround: SKSpriteNode {
     
     let NUMBER_OF_SEGMENTS = 20
