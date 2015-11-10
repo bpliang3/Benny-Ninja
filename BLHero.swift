@@ -15,7 +15,7 @@ class BLHero: SKSpriteNode {
     var arm: SKSpriteNode!
     var leftFoot: SKSpriteNode!
     var rightFoot: SKSpriteNode!
-    
+    var isUpsideDown = false
     
     init(){
         
@@ -75,6 +75,24 @@ class BLHero: SKSpriteNode {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func flip() {
+        isUpsideDown = !isUpsideDown
+        
+        var scale: CGFloat!
+        if isUpsideDown {
+            scale = -1.0
+        } else {
+            scale = 1.0
+        }
+        
+        let translate = SKAction.moveByX(0, y: scale*(size.height + kBLGroundHeight), duration: 0.1)
+        let flip = SKAction.scaleYTo(scale, duration: 0.1)
+        
+        runAction(translate)
+        runAction(flip)
+        
     }
     
     func startRunning() {
