@@ -11,6 +11,8 @@ import SpriteKit
 class GameScene: SKScene {
     
     var movingGround: BLMovingGround!
+    var hero: BLHero!
+    
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -19,6 +21,10 @@ class GameScene: SKScene {
         movingGround = BLMovingGround(size: CGSizeMake(view.frame.width, 20))
         movingGround.position = CGPointMake(0, view.frame.size.height/2)
         addChild(movingGround)
+        
+        hero = BLHero()
+        hero.position = CGPointMake(70, movingGround.position.y + movingGround.frame.size.height/2  + hero.frame.size.height/2)
+        addChild(hero)
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
