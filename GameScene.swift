@@ -25,11 +25,15 @@ class GameScene: SKScene {
         hero = BLHero()
         hero.position = CGPointMake(70, movingGround.position.y + movingGround.frame.size.height/2  + hero.frame.size.height/2)
         addChild(hero)
+        hero.breathe()
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         /* Called when a touch begins */
-        movingGround.start()
+       // movingGround.start()
+        hero.stop()
+        hero.startRunning()
+
         
     }
    

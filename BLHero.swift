@@ -76,4 +76,40 @@ class BLHero: SKSpriteNode {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func startRunning() {
+        
+        let rotateBack = SKAction.rotateByAngle(-CGFloat(M_PI)/2.0, duration: 0.1)
+        arm.runAction(rotateBack)
+        
+        performOneRunCycle()
+    }
+    
+    func performOneRunCycle(){
+        let up = SKAction.moveByX(0, y: 2, duration: 0.05)
+        let down = SKAction.moveByX(0, y: -2, duration: 0.05)
+        
+        leftFoot.runAction(up, completion: { () -> Void in
+            self.leftFoot.runAction(down)
+            self.rightFoot.runAction(up, completion: { () -> Void in
+                self.rightFoot.runAction(down, completion: { () -> Void in
+                    self.performOneRunCycle()
+                })
+            })
+        })
+        
+    }
+    
+    func breathe() {
+        let breatheOut = SKAction.moveByX(0, y: -2, duration: 1/2)
+        let breatheIn = SKAction.moveByX(0, y: 2, duration: 1/2)
+        let breath = SKAction.sequence([breatheOut, breatheIn])
+        
+        body.runAction(SKAction.repeatActionForever(breath))
+    }
+    
+    func stop() {
+        body.removeAllActions() 
+    }
+    
 }
