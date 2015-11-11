@@ -13,6 +13,7 @@ class BLWallGenerator: SKSpriteNode {
     
     var generationTimer: NSTimer?
     var walls = [BLWall]()
+    var wallTrackers = [BLWall]()
     
     
     func startGeneratingWallsEvery(seconds: NSTimeInterval) {
@@ -40,6 +41,7 @@ class BLWallGenerator: SKSpriteNode {
         wall.position.x = size.width/2 + wall.size.width/2
         wall.position.y = scale * (kBLGroundHeight/2 + wall.size.height/2)
         walls.append(wall)
+        wallTrackers.append(wall)
         addChild(wall)
     }
     

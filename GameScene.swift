@@ -30,7 +30,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addStartLabel()
         addPointsLabels()
         addPhysicsWorld()
-        
+        load_highscore()
         
         
     }
@@ -100,6 +100,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //physicsWorld.gravity = CGVectorMake(0.0, -9.8)
     }
     
+    func load_highscore() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let highScoreLabel = childNodeWithName("highScoreLabel") as! BLPointsLabel
+        
+        highScoreLabel.setTo(defaults.integerForKey("highscore"))
+    }
+    
     func start() {
         isStarted = true
         
@@ -132,6 +139,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(gameOverLabel)
         gameOverLabel.runAction(blinkAnimation())
         
+        // Save high score
+        let pointsLabel = childNodeWithName("pointsLabel") as! BLPointsLabel
+        let highScoreLabel = childNodeWithName("highScoreLabel") as! BLPointsLabel
+        
+        if highScoreLabel.number < pointsLabel.number {
+            highScoreLabel.setTo(pointsLabel.number)
+            
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.setInteger(highScoreLabel.number, forKey: "highscore")
+            
+        }
     }
     
     func restart() {
@@ -161,6 +179,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+        if wallGenerator.wallTrackers.count > 0 {
+            let wall = wallGenerator.wallTrackers[0] as BLWall
+        
+            let wallLocation = wallGenerator.convertPoint(wall.position, toNode: self)
+            if wallLocation.x < hero.position.x {
+                wallGenerator.wallTrackers.removeAtIndex(0)
+                let pointsLabel = childNodeWithName("pointsLabel") as! BLPointsLabel
+                pointsLabel.increment()
+            }
+        }
     }
     
     // MARK: - SKPhysicsContactDelegate

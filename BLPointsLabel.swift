@@ -30,6 +30,11 @@ class BLPointsLabel: SKLabelNode {
         text = "\(number)"
         
     }
+    
+    func setTo(num: Int) {
+        self.number = num
+        text = "\(number)"
+    }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
