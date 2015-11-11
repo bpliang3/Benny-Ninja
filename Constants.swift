@@ -19,5 +19,9 @@ let kDefaultXToMovePerSecond: CGFloat = 320.0
 let heroCategory: UInt32 = 0x1 << 0
 let wallCategory: UInt32 = 0x1 << 1
 
+// Game Variables
+let kNumberOfPointsPerLevel = 5
+let kLevelGenerationTimes: [NSTimeInterval] = [1.0, 0.8, 0.6, 0.4, 0.3]
+
 
 

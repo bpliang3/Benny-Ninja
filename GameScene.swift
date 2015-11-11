@@ -17,6 +17,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var isStarted = false
     var isGameOver = false
+    var currentLevel = 0
     
     
     override func didMoveToView(view: SKView) {
@@ -187,6 +188,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 wallGenerator.wallTrackers.removeAtIndex(0)
                 let pointsLabel = childNodeWithName("pointsLabel") as! BLPointsLabel
                 pointsLabel.increment()
+                
+                if pointsLabel.number % kNumberOfPointsPerLevel == 0 {
+                    currentLevel++
+                    if currentLevel > kLevelGenerationTimes.count - 1 {
+                        currentLevel = kLevelGenerationTimes.count - 1
+                    }
+                    
+                    wallGenerator.stopGenerating()
+                    wallGenerator.startGeneratingWallsEvery(kLevelGenerationTimes[currentLevel])
+                }
+                
             }
         }
     }
