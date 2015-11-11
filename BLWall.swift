@@ -16,8 +16,11 @@ class BLWall: SKSpriteNode {
     let WALL_COLOR = UIColor.blackColor()
     
     init(){
-        super.init(texture: nil, color: WALL_COLOR, size: CGSizeMake(WALL_WIDTH, WALL_HEIGHT))
+        let size = CGSizeMake(WALL_WIDTH, WALL_HEIGHT)
         
+        super.init(texture: nil, color: WALL_COLOR, size: size)
+        
+        loadPhysicsBodyWithSize(size)
         startMoving()   
     }
 
@@ -25,8 +28,18 @@ class BLWall: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func loadPhysicsBodyWithSize(size: CGSize) {
+        physicsBody = SKPhysicsBody(rectangleOfSize: size)
+        physicsBody?.categoryBitMask = wallCategory
+        physicsBody?.affectedByGravity = false
+    }
+    
     func startMoving() {
-        let moveLeft = SKAction.moveByX(-300, y: 0, duration: 1)
+        let moveLeft = SKAction.moveByX(-kDefaultXToMovePerSecond, y: 0, duration: 1)
         runAction(SKAction.repeatActionForever(moveLeft))
+    }
+    
+    func stopMoving(){
+        removeAllActions()
     }
 }

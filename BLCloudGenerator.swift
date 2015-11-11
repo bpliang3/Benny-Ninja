@@ -29,12 +29,21 @@ class BLCloudGenerator: SKSpriteNode {
     }
     
     func startGeneratingWithSpawnTime(seconds: NSTimeInterval) {
+        generationTimer = NSTimer.scheduledTimerWithTimeInterval(seconds, target: self, selector: "generateCloud", userInfo: nil, repeats: true)
+    }
+    
+    func generateCloud() {
         let x = size.width/2 + CLOUD_WIDTH/2
         let y = CGFloat(arc4random_uniform(UInt32(size.height))) - size.height/2
+        
         
         let cloud = BLCloud(size: CGSizeMake(CLOUD_WIDTH, CLOUD_HEIGHT))
         cloud.position = CGPointMake(x, y)
         cloud.zPosition = -1
         addChild(cloud)
+    }
+    
+    func stopGenerating() {
+        generationTimer.invalidate()
     }
 }

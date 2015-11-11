@@ -12,9 +12,16 @@ import SpriteKit
 class BLWallGenerator: SKSpriteNode {
     
     var generationTimer: NSTimer?
+    var walls = [BLWall]()
+    
     
     func startGeneratingWallsEvery(seconds: NSTimeInterval) {
         generationTimer = NSTimer.scheduledTimerWithTimeInterval(seconds, target: self, selector: "generateWall", userInfo: nil, repeats: true)
+        
+    }
+    
+    func stopGenerating() {
+        generationTimer?.invalidate()
         
     }
     
@@ -32,6 +39,14 @@ class BLWallGenerator: SKSpriteNode {
         let wall = BLWall()
         wall.position.x = size.width/2 + wall.size.width/2
         wall.position.y = scale * (kBLGroundHeight/2 + wall.size.height/2)
+        walls.append(wall)
         addChild(wall)
+    }
+    
+    func stopWalls() {
+        stopGenerating()
+        for wall in walls {
+            wall.stopMoving()
+        }
     }
 }

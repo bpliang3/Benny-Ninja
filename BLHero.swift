@@ -18,9 +18,46 @@ class BLHero: SKSpriteNode {
     var isUpsideDown = false
     
     init(){
+        let size = CGSizeMake(32, 44)
         
-        super.init(texture: nil, color: UIColor.clearColor(), size: CGSizeMake(32, 44))
+        super.init(texture: nil, color: UIColor.clearColor(), size: size)
         
+        loadAppearance()
+        loadPhysicsBodyWithSize(size)
+        
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func flip() {
+        isUpsideDown = !isUpsideDown
+        
+        var scale: CGFloat!
+        if isUpsideDown {
+            scale = -1.0
+        } else {
+            scale = 1.0
+        }
+        
+        let translate = SKAction.moveByX(0, y: scale*(size.height + kBLGroundHeight), duration: 0.1)
+        let flip = SKAction.scaleYTo(scale, duration: 0.1)
+        
+        runAction(translate)
+        runAction(flip)
+        
+    }
+    
+    func loadPhysicsBodyWithSize(size: CGSize) {
+        physicsBody = SKPhysicsBody(rectangleOfSize: size)
+        physicsBody?.categoryBitMask = heroCategory
+        physicsBody?.contactTestBitMask = wallCategory
+        physicsBody?.affectedByGravity = false
+    }
+    
+    func loadAppearance(){
+       
         body = SKSpriteNode(color: UIColor.blackColor(), size: CGSizeMake(32, 40))
         body.position = CGPointMake(0, 2)
         addChild(body)
@@ -68,32 +105,8 @@ class BLHero: SKSpriteNode {
         rightFoot = leftFoot.copy() as! SKSpriteNode
         rightFoot.position.x = 8
         addChild(rightFoot)
-        
-        
-        
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
-    func flip() {
-        isUpsideDown = !isUpsideDown
-        
-        var scale: CGFloat!
-        if isUpsideDown {
-            scale = -1.0
-        } else {
-            scale = 1.0
-        }
-        
-        let translate = SKAction.moveByX(0, y: scale*(size.height + kBLGroundHeight), duration: 0.1)
-        let flip = SKAction.scaleYTo(scale, duration: 0.1)
-        
-        runAction(translate)
-        runAction(flip)
-        
-    }
     
     func startRunning() {
         
@@ -101,6 +114,11 @@ class BLHero: SKSpriteNode {
         arm.runAction(rotateBack)
         
         performOneRunCycle()
+    }
+    
+    func stopRunning() {
+        leftFoot.removeAllActions()
+        rightFoot.removeAllActions()
     }
     
     func performOneRunCycle(){
@@ -126,8 +144,8 @@ class BLHero: SKSpriteNode {
         body.runAction(SKAction.repeatActionForever(breath))
     }
     
-    func stop() {
-        body.removeAllActions() 
+    func stopBreathing() {
+        body.removeAllActions()
     }
     
 }
