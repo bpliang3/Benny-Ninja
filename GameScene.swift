@@ -28,6 +28,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addClouds()
         addWalls()
         addStartLabel()
+        addPointsLabels()
         addPhysicsWorld()
         
         
@@ -68,10 +69,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         tapToStartLabel.position.y  = view!.center.y + 40
         tapToStartLabel.fontColor = UIColor.blackColor()
         addChild(tapToStartLabel)
+        tapToStartLabel.runAction(blinkAnimation())
+    }
+    
+    func addPointsLabels() {
+        let pointsLabel = BLPointsLabel(num: 0)
+        let highScoreLabel = BLPointsLabel(num: 0)
+        let highScoreTextLabel = SKLabelNode(text: "High Score:")
+        
+        pointsLabel.name = "pointsLabel"
+        pointsLabel.position = CGPointMake(20, view!.frame.size.height - 35)
+        addChild(pointsLabel)
+        
+        highScoreLabel.name = "highScoreLabel"
+        highScoreLabel.position = CGPointMake(view!.frame.size.width - 20, view!.frame.size.height - 35)
+        addChild(highScoreLabel)
+        
+        highScoreTextLabel.name = "highScoreTextLabel"
+        highScoreTextLabel.fontColor = UIColor.blackColor()
+        highScoreTextLabel.fontSize = 18.0
+        highScoreTextLabel.position = CGPointMake(-60, 0)
+        highScoreLabel.addChild(highScoreTextLabel)
+        
+        
+        
     }
     
     func addPhysicsWorld() {
         physicsWorld.contactDelegate = self
+        //physicsWorld.gravity = CGVectorMake(0.0, -9.8)
     }
     
     func start() {
@@ -92,7 +118,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         isGameOver = true
         
         // stop everything
-        hero.physicsBody = nil
+        hero.fall()
         wallGenerator.stopWalls()
         movingGround.stop()
         hero.stopRunning()
@@ -104,6 +130,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOverLabel.position.y  = view!.center.y + 40
         gameOverLabel.fontColor = UIColor.grayColor()
         addChild(gameOverLabel)
+        gameOverLabel.runAction(blinkAnimation())
         
     }
     
@@ -139,7 +166,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - SKPhysicsContactDelegate
     func didBeginContact(contact: SKPhysicsContact) {
        // println("didBeginContact called")
-        gameOver()
+        if !isGameOver {
+            gameOver()
+        }
+    }
+    
+    // MARK: - Animations
+    func blinkAnimation() -> SKAction {
+        let duration = 0.4
+        let fadeOut = SKAction.fadeAlphaTo(0.0, duration: duration)
+        let fadeIN = SKAction.fadeAlphaTo(1.0, duration: duration)
         
+        let blink = SKAction.sequence([fadeOut, fadeIN])
+        return SKAction.repeatActionForever(blink)
     }
 }
